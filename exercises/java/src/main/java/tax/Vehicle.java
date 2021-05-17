@@ -2,7 +2,7 @@ package tax;
 
 import java.time.LocalDate;
 
-class Vehicle {
+public class Vehicle {
     private final int co2Emissions;
     private final FuelType fuelType;
     private final LocalDate dateOfFirstRegistration;

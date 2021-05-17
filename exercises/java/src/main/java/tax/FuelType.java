@@ -1,6 +1,6 @@
 package tax;
 
-enum FuelType {
+public enum FuelType {
     PETROL,
     DIESEL,
     ELECTRIC, ALTERNATIVE_FUEL

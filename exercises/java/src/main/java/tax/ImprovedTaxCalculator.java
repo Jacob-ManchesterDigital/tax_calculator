@@ -29,13 +29,29 @@ public class ImprovedTaxCalculator extends TaxCalculator {
             new TaxBracket(51, 25),
             new TaxBracket(1, 10)
     };
+    private TaxBracket[] alternativeTaxBrackets = {
+            new TaxBracket(256, 2060),
+            new TaxBracket(226, 1750),
+            new TaxBracket(191, 1230),
+            new TaxBracket(171, 820),
+            new TaxBracket(151, 505),
+            new TaxBracket(131, 195),
+            new TaxBracket(111, 155),
+            new TaxBracket(101, 135),
+            new TaxBracket(91, 115),
+            new TaxBracket(76, 95),
+            new TaxBracket(51, 15),
+            new TaxBracket(1, 0),
+            new TaxBracket(0, 0),
+    };
+
 
     public ImprovedTaxCalculator(int year) {
         super(year);
     }
 
     @Override
-    int calculateTax(Vehicle vehicle) {
+    public int calculateTax(Vehicle vehicle) {
         int taxAmount = 0;
         int emissions = vehicle.getCo2Emissions();
         TaxBracket[] taxBrackets;
@@ -43,6 +59,9 @@ public class ImprovedTaxCalculator extends TaxCalculator {
         switch (vehicle.getFuelType()) {
             case DIESEL:
                 taxBrackets = dieselBrackets;
+                break;
+            case ALTERNATIVE_FUEL:
+                taxBrackets = alternativeTaxBrackets;
                 break;
             // PETROL
             default:
@@ -56,6 +75,7 @@ public class ImprovedTaxCalculator extends TaxCalculator {
                 break;
             }
         }
+
         return taxAmount;
     }
 }
