@@ -1,7 +1,21 @@
 package tax;
 
 public class ImprovedTaxCalculator extends TaxCalculator {
-    private TaxBracket[] taxBrackets = new TaxBracket[]{
+    private final static TaxBracket[] dieselBrackets = new TaxBracket[]{
+            new TaxBracket(256, 2070),
+            new TaxBracket(226, 2070),
+            new TaxBracket(191, 1760),
+            new TaxBracket(171, 1240),
+            new TaxBracket(151, 830),
+            new TaxBracket(131, 515),
+            new TaxBracket(111, 205),
+            new TaxBracket(101, 165),
+            new TaxBracket(91, 145),
+            new TaxBracket(76, 125),
+            new TaxBracket(51, 105),
+            new TaxBracket(1, 25)
+    };
+    private final static TaxBracket[] petrolBrackets = new TaxBracket[]{
             new TaxBracket(256, 2070),
             new TaxBracket(226, 1760),
             new TaxBracket(191, 1240),
@@ -40,19 +54,25 @@ public class ImprovedTaxCalculator extends TaxCalculator {
     public int calculateTax(Vehicle vehicle) {
         int taxAmount = 0;
         int emissions = vehicle.getCo2Emissions();
-        if (vehicle.getFuelType() == FuelType.PETROL){
-            for (TaxBracket bracket : taxBrackets) {
-                if (emissions >= bracket.getLowerBound()) {
-                    taxAmount = bracket.getAmount();
-                    break;
-                }
-            }
-        } else {
-            for (TaxBracket bracket : alternativeTaxBrackets) {
-                if (emissions >= bracket.getLowerBound()) {
-                    taxAmount = bracket.getAmount();
-                    break;
-                }
+        TaxBracket[] taxBrackets;
+
+        switch (vehicle.getFuelType()) {
+            case DIESEL:
+                taxBrackets = dieselBrackets;
+                break;
+            case ALTERNATIVE_FUEL:
+                taxBrackets = alternativeTaxBrackets;
+                break;
+            // PETROL
+            default:
+                taxBrackets = petrolBrackets;
+                break;
+        }
+
+        for (TaxBracket bracket : taxBrackets) {
+            if (emissions >= bracket.getLowerBound()) {
+                taxAmount = bracket.getAmount();
+                break;
             }
         }
 
