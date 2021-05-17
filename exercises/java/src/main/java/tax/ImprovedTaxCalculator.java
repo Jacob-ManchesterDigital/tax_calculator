@@ -1,6 +1,20 @@
 package tax;
 
 public class ImprovedTaxCalculator extends TaxCalculator {
+    private TaxBracket[] taxBrackets = new TaxBracket[]{
+            new TaxBracket(256, 2070),
+            new TaxBracket(226, 1760),
+            new TaxBracket(191, 1240),
+            new TaxBracket(171, 830),
+            new TaxBracket(151, 515),
+            new TaxBracket(131, 205),
+            new TaxBracket(111, 165),
+            new TaxBracket(101, 145),
+            new TaxBracket(91, 125),
+            new TaxBracket(76, 105),
+            new TaxBracket(51, 25),
+            new TaxBracket(1, 10)
+    };
 
     public ImprovedTaxCalculator(int year) {
         super(year);
@@ -11,24 +25,9 @@ public class ImprovedTaxCalculator extends TaxCalculator {
         int taxAmount = 0;
         int emissions = vehicle.getCo2Emissions();
 
-        int[][] taxBoundaries = new int[][]{
-                {256, 2070},
-                {226, 1760},
-                {191, 1240},
-                {171, 830},
-                {151, 515},
-                {131, 205},
-                {111, 165},
-                {101, 145},
-                {91, 125},
-                {76, 105},
-                {51, 25},
-                {1, 10}
-        };
-
-        for (int[] boundary : taxBoundaries) {
-            if (emissions >= boundary[0]) {
-                taxAmount = boundary[1];
+        for (TaxBracket bracket : taxBrackets) {
+            if (emissions >= bracket.getLowerBound()) {
+                taxAmount = bracket.getAmount();
                 break;
             }
         }
