@@ -48,19 +48,12 @@ public class ImprovedTaxCalculator extends TaxCalculator {
     };
     private boolean expensiveVehicleToggle;
 
-    private boolean calculateSubsequentYears;
-
-
-    public ImprovedTaxCalculator(boolean calculateSubsequentYears, int year) {
-        this(year);
-        this.calculateSubsequentYears = calculateSubsequentYears;
-    }
-
     public ImprovedTaxCalculator(int year) {
         super(year);
     }
+
     public ImprovedTaxCalculator(int year, boolean expensiveVehicleToggle) {
-        super(year);
+        this(year);
         this.expensiveVehicleToggle = expensiveVehicleToggle;
     }
 
@@ -70,7 +63,27 @@ public class ImprovedTaxCalculator extends TaxCalculator {
         int emissions = vehicle.getCo2Emissions();
         TaxBracket[] taxBrackets;
 
-        if (getYear() != vehicle.getDateOfFirstRegistration().getYear() && calculateSubsequentYears){
+        switch (vehicle.getFuelType()) {
+            case DIESEL:
+                taxBrackets = dieselBrackets;
+                break;
+            case ALTERNATIVE_FUEL:
+                taxBrackets = alternativeBrackets;
+                break;
+            case PETROL:
+            default:
+                taxBrackets = petrolBrackets;
+                break;
+        }
+
+        for (TaxBracket bracket : taxBrackets) {
+            if (emissions >= bracket.getLowerBound()) {
+                taxAmount = bracket.getAmount();
+                break;
+            }
+        }
+
+        if (getYear() != vehicle.getDateOfFirstRegistration().getYear()) {
             switch (vehicle.getFuelType()) {
                 case PETROL:
                 case DIESEL:
@@ -85,36 +98,14 @@ public class ImprovedTaxCalculator extends TaxCalculator {
                     break;
             }
         }
-        else {
-            switch (vehicle.getFuelType()) {
-                case DIESEL:
-                    taxBrackets = dieselBrackets;
-                    break;
-                case ALTERNATIVE_FUEL:
-                    taxBrackets = alternativeBrackets;
-                    break;
-                case PETROL:
-                default:
-                    taxBrackets = petrolBrackets;
-                    break;
-            }
-            if (expensiveVehicleToggle) {
-                if(vehicle.getFuelType() == PETROL || vehicle.getFuelType() == DIESEL) {
-                    taxAmount = 450;
-                }
-                else if(vehicle.getFuelType() == ELECTRIC) {
-                    taxAmount = 310;
-                }
-                else if(vehicle.getFuelType() == ALTERNATIVE_FUEL) {
-                    taxAmount = 440;
-                }
-            } else {
-                for (TaxBracket bracket : taxBrackets) {
-                    if (emissions >= bracket.getLowerBound()) {
-                        taxAmount = bracket.getAmount();
-                        break;
-                    }
-                }
+
+        if (expensiveVehicleToggle) {
+            if (vehicle.getFuelType() == PETROL || vehicle.getFuelType() == DIESEL) {
+                taxAmount = 450;
+            } else if (vehicle.getFuelType() == ELECTRIC) {
+                taxAmount = 310;
+            } else if (vehicle.getFuelType() == ALTERNATIVE_FUEL) {
+                taxAmount = 440;
             }
         }
         return taxAmount;
