@@ -1,7 +1,5 @@
 package tax;
 
-import static tax.FuelType.*;
-
 public class ImprovedTaxCalculator extends TaxCalculator {
     private final static TaxBracket[] dieselBrackets = new TaxBracket[]{
             new TaxBracket(256, 2070),
@@ -31,7 +29,7 @@ public class ImprovedTaxCalculator extends TaxCalculator {
             new TaxBracket(51, 25),
             new TaxBracket(1, 10)
     };
-    private final static TaxBracket[] alternativeBrackets = {
+    private final static TaxBracket[] alternativeBrackets = new TaxBracket[]{
             new TaxBracket(256, 2060),
             new TaxBracket(226, 1750),
             new TaxBracket(191, 1230),
@@ -110,7 +108,6 @@ public class ImprovedTaxCalculator extends TaxCalculator {
                         break;
                 }
             }
-
         }
         return taxAmount;
     }
