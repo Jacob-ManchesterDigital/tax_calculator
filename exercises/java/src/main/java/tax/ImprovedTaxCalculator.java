@@ -1,5 +1,7 @@
 package tax;
 
+import static tax.FuelType.*;
+
 public class ImprovedTaxCalculator extends TaxCalculator {
     private final static TaxBracket[] dieselBrackets = new TaxBracket[]{
             new TaxBracket(256, 2070),
@@ -44,10 +46,15 @@ public class ImprovedTaxCalculator extends TaxCalculator {
             new TaxBracket(1, 0),
             new TaxBracket(0, 0),
     };
+    private boolean expensiveVehicleToggle;
 
 
     public ImprovedTaxCalculator(int year) {
         super(year);
+    }
+    public ImprovedTaxCalculator(int year, boolean expensiveVehicleToggle) {
+        super(year);
+        this.expensiveVehicleToggle = expensiveVehicleToggle;
     }
 
     @Override
@@ -68,14 +75,24 @@ public class ImprovedTaxCalculator extends TaxCalculator {
                 taxBrackets = petrolBrackets;
                 break;
         }
-
-        for (TaxBracket bracket : taxBrackets) {
-            if (emissions >= bracket.getLowerBound()) {
-                taxAmount = bracket.getAmount();
-                break;
+        if (expensiveVehicleToggle) {
+            if(vehicle.getFuelType() == PETROL || vehicle.getFuelType() == DIESEL) {
+                taxAmount = 450;
+            }
+            else if(vehicle.getFuelType() == ELECTRIC) {
+                taxAmount = 310;
+            }
+            else if(vehicle.getFuelType() == ALTERNATIVE_FUEL) {
+                taxAmount = 440;
+            }
+        } else {
+            for (TaxBracket bracket : taxBrackets) {
+                if (emissions >= bracket.getLowerBound()) {
+                    taxAmount = bracket.getAmount();
+                    break;
+                }
             }
         }
-
         return taxAmount;
     }
 }
