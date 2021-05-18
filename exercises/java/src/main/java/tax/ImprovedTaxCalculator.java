@@ -46,15 +46,9 @@ public class ImprovedTaxCalculator extends TaxCalculator {
             new TaxBracket(1, 0),
             new TaxBracket(0, 0),
     };
-    private boolean expensiveVehicleToggle;
 
     public ImprovedTaxCalculator(int year) {
         super(year);
-    }
-
-    public ImprovedTaxCalculator(int year, boolean expensiveVehicleToggle) {
-        this(year);
-        this.expensiveVehicleToggle = expensiveVehicleToggle;
     }
 
     @Override
@@ -99,7 +93,7 @@ public class ImprovedTaxCalculator extends TaxCalculator {
             }
         }
 
-        if (expensiveVehicleToggle) {
+        if (getYear() != vehicle.getDateOfFirstRegistration().getYear() && vehicle.getListPrice() > 20000) {
             if (vehicle.getFuelType() == PETROL || vehicle.getFuelType() == DIESEL) {
                 taxAmount = 450;
             } else if (vehicle.getFuelType() == ELECTRIC) {

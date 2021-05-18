@@ -16,7 +16,7 @@ public class TaxCalculatorAfterFirstYearForExpensiveVehiclesTest {
 
     @Before
     public void setUp() {
-        taxCalculator = new ImprovedTaxCalculator(2018, true);
+        taxCalculator = new ImprovedTaxCalculator(2018);
     }
 
     @Test
