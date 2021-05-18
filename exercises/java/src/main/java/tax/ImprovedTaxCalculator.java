@@ -29,7 +29,7 @@ public class ImprovedTaxCalculator extends TaxCalculator {
             new TaxBracket(51, 25),
             new TaxBracket(1, 10)
     };
-    private TaxBracket[] alternativeTaxBrackets = {
+    private final static TaxBracket[] alternativeBrackets = {
             new TaxBracket(256, 2060),
             new TaxBracket(226, 1750),
             new TaxBracket(191, 1230),
@@ -61,7 +61,7 @@ public class ImprovedTaxCalculator extends TaxCalculator {
                 taxBrackets = dieselBrackets;
                 break;
             case ALTERNATIVE_FUEL:
-                taxBrackets = alternativeTaxBrackets;
+                taxBrackets = alternativeBrackets;
                 break;
             // PETROL
             default:
