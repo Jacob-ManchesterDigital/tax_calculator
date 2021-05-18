@@ -78,29 +78,39 @@ public class ImprovedTaxCalculator extends TaxCalculator {
         }
 
         if (getYear() != vehicle.getDateOfFirstRegistration().getYear()) {
-            switch (vehicle.getFuelType()) {
-                case PETROL:
-                case DIESEL:
-                    taxAmount = 140;
-                    break;
-                case ALTERNATIVE_FUEL:
-                    taxAmount = 130;
-                    break;
-                case ELECTRIC:
-                default:
-                    taxAmount = 0;
-                    break;
+            if (vehicle.getListPrice() > 20000){
+                switch (vehicle.getFuelType()) {
+                    case PETROL:
+                    case DIESEL:
+                        taxAmount = 450;
+                        break;
+                    case ALTERNATIVE_FUEL:
+                        taxAmount = 440;
+                        break;
+                    case ELECTRIC:
+                        taxAmount = 310;
+                        break;
+                    default:
+                        taxAmount = 0;
+                        break;
+                }
             }
-        }
+            else{
+                switch (vehicle.getFuelType()) {
+                    case PETROL:
+                    case DIESEL:
+                        taxAmount = 140;
+                        break;
+                    case ALTERNATIVE_FUEL:
+                        taxAmount = 130;
+                        break;
+                    case ELECTRIC:
+                    default:
+                        taxAmount = 0;
+                        break;
+                }
+            }
 
-        if (getYear() != vehicle.getDateOfFirstRegistration().getYear() && vehicle.getListPrice() > 20000) {
-            if (vehicle.getFuelType() == PETROL || vehicle.getFuelType() == DIESEL) {
-                taxAmount = 450;
-            } else if (vehicle.getFuelType() == ELECTRIC) {
-                taxAmount = 310;
-            } else if (vehicle.getFuelType() == ALTERNATIVE_FUEL) {
-                taxAmount = 440;
-            }
         }
         return taxAmount;
     }
